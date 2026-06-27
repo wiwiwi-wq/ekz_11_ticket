@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Музыкальный поисковик</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover { transform: scale(1.08) translateY(-8px); }
+    .modal { animation: modalPop 0.3s ease-out forwards; }
+    @keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <header class="flex justify-between items-center mb-10">
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-music text-5xl text-purple-400"></i>
+        <h1 class="text-4xl font-bold">Найди свой ритм ♫</h1>
+      </div>
+    </header>
+
+    <div class="max-w-2xl mx-auto mb-12">
+      <div class="relative">
+        <input 
+          type="text" 
+          id="searchInput"
+          placeholder="Поиск трека или исполнителя (например: The Weeknd)"
+          class="w-full bg-zinc-900 border border-zinc-700 rounded-3xl px-6 py-5 text-lg focus:outline-none focus:border-purple-500">
+        <button id="searchBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-purple-600 hover:bg-purple-500 px-8 py-3 rounded-2xl font-semibold transition-colors">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="resultsCount" class="mb-6 text-zinc-400 text-lg"></div>
+
+    <div id="musicGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+  </div>
+
+  <div id="modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+    <div class="modal bg-zinc-900 rounded-3xl max-w-lg w-full overflow-hidden">
+      <button id="closeModal" class="absolute top-4 right-4 text-3xl z-10 bg-black/60 hover:bg-red-500 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+      
+      <div id="modalImage" class="h-80 bg-cover bg-center"></div>
+      
+      <div class="p-8">
+        <h2 id="modalTitle" class="text-3xl font-bold"></h2>
+        <p id="modalArtist" class="text-purple-400 text-xl mt-1"></p>
+        
+        <div class="mt-8 space-y-3 text-sm">
+          <div><strong>Слушателей:</strong> <span id="modalListeners"></span></div>
+          <div><strong>Прослушиваний:</strong> <span id="modalPlaycount"></span></div>
+        </div>
+        
+        <a id="lastfmLink" href="#" target="_blank" class="mt-8 block text-center bg-white text-black py-4 rounded-2xl font-semibold hover:bg-gray-100">
+          Открыть на Last.fm
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY = "4fdfd108f7f217c94e4293ecb91108f3";
+
+    async function searchMusic(query) {
+      const grid = document.getElementById('musicGrid');
+      grid.innerHTML = '<p class="col-span-full text-center py-20 text-zinc-400">Загрузка...</p>';
+
+      try {
+        const url = `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${encodeURIComponent(query)}&api_key=${API_KEY}&format=json&limit=20`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const tracks = data.results?.trackmatches?.track || [];
+        
+        if (tracks.length > 0) {
+          document.getElementById('resultsCount').textContent = `Найдено: ${tracks.length} треков`;
+          renderTracks(tracks);
+        } else {
+          grid.innerHTML = '<p class="col-span-full text-center py-20 text-zinc-400">Ничего не найдено</p>';
+        }
+      } catch (err) {
+        alert("Ошибка API. Показываем резервные данные.");
+        loadFallback();
+      }
+    }
+
+    function renderTracks(tracks) {
+      const grid = document.getElementById('musicGrid');
+      grid.innerHTML = '';
+
+      tracks.forEach(track => {
+        const card = document.createElement('div');
+        card.className = `card-hover bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer`;
+        card.innerHTML = `
+          <div class="h-64 bg-zinc-800 flex items-center justify-center relative">
+            <i class="fa-solid fa-music text-7xl text-purple-800"></i>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-lg line-clamp-2">${track.name}</h3>
+            <p class="text-zinc-400 mt-1">${track.artist}</p>
+          </div>
+        `;
+        card.onclick = () => showTrackDetails(track);
+        grid.appendChild(card);
+      });
+    }
+
+    function showTrackDetails(track) {
+      document.getElementById('modalTitle').textContent = track.name;
+      document.getElementById('modalArtist').textContent = track.artist;
+      document.getElementById('modalListeners').textContent = Number(track.listeners || 0).toLocaleString('ru-RU');
+      document.getElementById('modalPlaycount').textContent = Number(track.playcount || 0).toLocaleString('ru-RU');
+      document.getElementById('lastfmLink').href = track.url || '#';
+
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function loadFallback() {
+      const fallback = [
+        {name: "Blinding Lights", artist: "The Weeknd", listeners: "2500000", playcount: "8000000", url: "#"},
+        {name: "Levitating", artist: "Dua Lipa", listeners: "1800000", playcount: "6000000", url: "#"},
+        {name: "Save Your Tears", artist: "The Weeknd", listeners: "1400000", playcount: "4500000", url: "#"}
+      ];
+      renderTracks(fallback);
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const q = document.getElementById('searchInput').value.trim();
+      if (q) searchMusic(q);
+    });
+
+    document.getElementById('searchInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        const q = document.getElementById('searchInput').value.trim();
+        if (q) searchMusic(q);
+      }
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('modal').classList.add('hidden');
+    });
+
+    window.onload = () => searchMusic("The Weeknd");
+  </script>
+</body>
+</html>

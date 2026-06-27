@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель обслуживания ПО</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --indigo: #4f46e5;
+      --indigo-dark: #3730a3;
+      --indigo-light: #6366f1;
+    }
+    body {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: #e0e7ff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .header {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+    }
+    .card {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      backdrop-filter: blur(12px);
+      color: #e0e7ff;
+      transition: all 0.4s ease;
+    }
+    .card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(79, 70, 229, 0.5);
+      border-color: #818cf8;
+    }
+    .btn-indigo {
+      background: var(--indigo);
+      border: none;
+      color: white;
+      transition: all 0.3s;
+    }
+    .btn-indigo:hover {
+      background: #6366f1;
+      transform: translateY(-2px);
+    }
+    .status-ok { color: #22c55e; }
+    .status-warning { color: #facc15; }
+    .status-critical { color: #f87171; }
+    h1, h2, h3, h5 { color: #ffffff; }
+    .text-muted { color: #c4d0ff !important; }
+  </style>
+</head>
+<body>
+
+  <header class="header text-white py-5 text-center">
+    <div class="container">
+      <i class="fas fa-shield-alt fa-3x mb-3"></i>
+      <h1 class="display-4 fw-bold">Панель обслуживания ПО</h1>
+      <p class="lead">Сервисная панель специалиста по сопровождению и поддержке систем</p>
+    </div>
+  </header>
+
+  <div class="container py-5">
+
+    <div class="row mb-5">
+      <div class="col-lg-8" data-aos="fade-up">
+        <h2 class="mb-4"><i class="fas fa-bullseye"></i> Цель работы</h2>
+        <div class="card p-4">
+          <p class="lead">Разработать современный веб-интерфейс сервисной панели для мониторинга, диагностики, обновления и обслуживания программного обеспечения компьютерных систем.</p>
+        </div>
+      </div>
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="mb-4"><i class="fas fa-database"></i> Исходные данные</h2>
+        <div class="card p-4">
+          <p>Список установленного ПО, актуальные версии, данные о последних обновлениях и известных уязвимостях.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5" data-aos="fade-up">
+      <h2 class="mb-4"><i class="fas fa-timeline"></i> Этапы сопровождения</h2>
+      <div class="row g-4 text-center">
+        <div class="col-md-3">
+          <div class="card p-4 h-100">
+            <h3 class="text-indigo">01</h3>
+            <h5>Проверка версии</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-4 h-100">
+            <h3 class="text-indigo">02</h3>
+            <h5>Диагностика</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-4 h-100">
+            <h3 class="text-indigo">03</h3>
+            <h5>Обновление</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-4 h-100">
+            <h3 class="text-indigo">04</h3>
+            <h5>Отчёт и фиксация</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5" data-aos="fade-up">
+      <h2 class="mb-4">Проверяемые профессиональные компетенции</h2>
+      <div class="card p-4">
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="fas fa-check text-success me-3"></i>Осуществлять инсталляцию, настройку и обслуживание программного обеспечения компьютерных систем</li>
+          <li class="mb-3"><i class="fas fa-check text-success me-3"></i>Осуществлять измерения эксплуатационных характеристик программного обеспечения</li>
+          <li class="mb-3"><i class="fas fa-check text-success me-3"></i>Выполнять работы по модификации отдельных компонент программного обеспечения</li>
+          <li><i class="fas fa-check text-success me-3"></i>Обеспечивать защиту программного обеспечения компьютерных систем</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mb-5" data-aos="fade-up">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-tools"></i> Интерактивная сервисная панель</h2>
+        <div>
+          <button class="btn btn-indigo me-2" onclick="loadSoftware()">
+            <i class="fas fa-sync"></i> Загрузить данные
+          </button>
+          <button class="btn btn-success" onclick="generateReport()">
+            <i class="fas fa-file-export"></i> Отчёт
+          </button>
+        </div>
+      </div>
+
+      <div class="row" id="softwareCards"></div>
+    </div>
+
+    <div class="card p-5 text-center" data-aos="fade-up">
+      <h2>✅ Ожидаемый результат</h2>
+      <p class="lead mb-0">Специалист получает удобный инструмент для быстрого анализа состояния ПО, проведения обслуживания и формирования отчётов.</p>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true });
+
+    const softwareList = [
+      { name: "Windows 11 Pro", version: "23H2", status: "ok", lastUpdate: "15.06.2026", risk: "Низкий", action: "Система в норме" },
+      { name: "Microsoft Office 365", version: "2406", status: "warning", lastUpdate: "02.05.2026", risk: "Средний", action: "Рекомендуется обновить" },
+      { name: "Google Chrome", version: "127.0", status: "ok", lastUpdate: "22.06.2026", risk: "Низкий", action: "Актуальная версия" },
+      { name: "Kaspersky Endpoint", version: "11.9", status: "critical", lastUpdate: "10.03.2026", risk: "Высокий", action: "Необходимо обновление" },
+      { name: "1С:Предприятие 8", version: "8.3.25", status: "warning", lastUpdate: "18.06.2026", risk: "Средний", action: "Проверить обновление" },
+      { name: "Visual Studio Code", version: "1.90", status: "ok", lastUpdate: "24.06.2026", risk: "Низкий", action: "Обновлено недавно" }
+    ];
+
+    function loadSoftware() {
+      const container = document.getElementById('softwareCards');
+      container.innerHTML = '';
+
+      softwareList.forEach(item => {
+        let statusClass = item.status === 'ok' ? 'status-ok' : 
+                         item.status === 'warning' ? 'status-warning' : 'status-critical';
+        
+        const cardHTML = `
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title">${item.name}</h5>
+                  <i class="fas fa-circle ${statusClass}"></i>
+                </div>
+                <p class="mb-1"><strong>Версия:</strong> ${item.version}</p>
+                <p class="mb-1"><strong>Обновлено:</strong> ${item.lastUpdate}</p>
+                <p class="mb-3"><strong>Риск:</strong> <span class="${statusClass}">${item.risk}</span></p>
+                <p class="small">${item.action}</p>
+              </div>
+              <div class="card-footer bg-transparent border-top">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-light flex-fill btn-sm" onclick="diagnose('${item.name}')">
+                    <i class="fas fa-stethoscope"></i> Диагностика
+                  </button>
+                  <button class="btn btn-indigo flex-fill btn-sm" onclick="updateSoftware('${item.name}')">
+                    <i class="fas fa-arrow-up"></i> Обновить
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        container.innerHTML += cardHTML;
+      });
+    }
+
+    function diagnose(name) {
+      alert(`🔍 Диагностика компонента "${name}" успешно завершена.\n\nОшибок и уязвимостей не обнаружено.`);
+    }
+
+    function updateSoftware(name) {
+      alert(`✅ ${name} успешно обновлён!\nВерсия обновлена до последней.`);
+    }
+
+    function generateReport() {
+      alert('📄 Отчёт о состоянии программного обеспечения сформирован и готов к экспорту.');
+    }
+
+    window.onload = loadSoftware;
+  </script>
+</body>
+</html>
